@@ -1,10 +1,23 @@
 var GameArea = React.createClass({
+	getInitialState: function() {
+		var initialCells = [];
+		var randomSelector;
+		for (var i = 0; i < 3500; i++) {
+			randomSelector = Math.random();
+			if (randomSelector > 0.7) {
+				initialCells.push(<div key={i} className="cell-alive"></div>);
+			} else {
+				initialCells.push(<div key={i} className="cell-dead"></div>);
+			}
+		}
+		return ({cells: initialCells});
+	},
 	render: function() {
 		return (
 			<div>
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
 				<Controls />
-				<Board />
+				<Board cells={this.state.cells}/>
 			</div>
 		);
 	}
@@ -24,17 +37,10 @@ var Controls = React.createClass({
 })
 
 var Board = React.createClass({
-	getInitialState: function() {
-		var initialCells = [];
-		for (var i = 0; i < 3500; i++) {
-			initialCells.push(<div key={i} className="cell"></div>);
-		}
-		return ({cells: initialCells});
-	},
 	render: function() {
 		return (
 			<div className="board">
-				{this.state.cells}
+				{this.props.cells}
 			</div>
 		);
 	}
