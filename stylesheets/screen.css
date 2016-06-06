@@ -39,19 +39,8 @@
   margin: 0 auto;
 }
 
-/* line 50, ../sass/screen.scss */
-.cell-alive {
-  box-sizing: border-box;
-  width: 12px;
-  height: 12px;
-  border-right: 1px solid #454545;
-  border-bottom: 1px solid #454545;
-  margin: 0;
-  background-color: red;
-}
-
-/* line 55, ../sass/screen.scss */
-.cell-dead {
+/* line 41, ../sass/screen.scss */
+.cell {
   box-sizing: border-box;
   width: 12px;
   height: 12px;
@@ -61,13 +50,28 @@
   background-color: black;
 }
 
-/* line 60, ../sass/screen.scss */
+/* line 51, ../sass/screen.scss */
+.alive {
+  background-color: #851818;
+}
+
+/*
+.cell-alive {
+	@include cell;
+	background-color: $cell-alive-color;
+}
+
+.cell-dead {
+	@include cell;
+	background-color: $cell-dead-color;
+}*/
+/* line 65, ../sass/screen.scss */
 .footer {
   margin-top: 30px;
   font-size: 0.7em;
   color: gray;
 }
-/* line 64, ../sass/screen.scss */
+/* line 69, ../sass/screen.scss */
 .footer a {
   color: gray;
 }
