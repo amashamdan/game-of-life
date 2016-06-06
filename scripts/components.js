@@ -39,8 +39,8 @@ var GameArea = React.createClass({
 			counter++;
 		}
 		return counter;
-},
-	runClick: function() {
+	},
+	getGeneration: function() {
 		var cells = this.state.cells;
 		for (var cell = 71; cell < 3429; cell++) {
 			var counter = 0;
@@ -56,8 +56,14 @@ var GameArea = React.createClass({
 				}	
 			}
 		}
-
 		this.setState({cells: cells});
+	},
+	runClick: function() {
+		/* NOTICE: this.try wasn't used directly inside setInterval because of scoping, this won't be referring to GameArea anymore. setting goforit to this.getGeneration passes the function definition only to goforit, inside the timer adding the brackets will run the function. If gorforit is set to this.getGeneration() it will run only once directly after run is clicked. */
+		var goforit = this.getGeneration;
+		setInterval(function() {
+			goforit();
+		}, 500)
 	},
 	render: function() {
 		return (
