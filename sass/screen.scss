@@ -2,5 +2,57 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+$cell-border-color: #454545;
+$cell-dead-color: black;
+$cell-alive-color: red;
 
-@import "compass/reset";
+#container {
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.main-header {
+	text-align: center;
+}
+
+.controls {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0 0 20px 0 ;
+}
+
+.control {
+	margin: 0 10px 0 10px;
+	width: 70px;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.board {
+	display: flex;
+	flex-wrap: wrap;
+	width: 840px;
+	margin: 0 auto;
+}
+
+.cell {
+	box-sizing: border-box;
+	background-color: $cell-dead-color;
+	width: 12px;
+	height: 12px;
+	border-right: 1px solid $cell-border-color;
+	border-bottom: 1px solid $cell-border-color;
+	margin: 0;
+}
+
+.footer {
+	margin-top: 30px;
+	font-size: 0.7em;
+	color: gray;
+	a {
+		color: gray;
+	}
+}
