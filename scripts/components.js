@@ -4,19 +4,66 @@ var GameArea = React.createClass({
 		var randomSelector;
 		for (var i = 0; i < 3500; i++) {
 			randomSelector = Math.random();
-			if (randomSelector > 0.7) {
-				initialCells.push(<div key={i} className="cell-alive"></div>);
+			if (randomSelector > 0.8) {
+				initialCells.push(<div key={i} className="cell alive"></div>);
 			} else {
-				initialCells.push(<div key={i} className="cell-dead"></div>);
+				initialCells.push(<div key={i} className="cell"></div>);
 			}
 		}
 		return ({cells: initialCells});
+	},
+	getAliveNeighbours: function(cells, cell) {
+		var counter = 0;
+		if (cells[cell - 1].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell + 1].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell - 70].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell + 70].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell - 69].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell - 71].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell + 69].props.className == "cell alive") {
+			counter++;
+		}
+		if (cells[cell + 71].props.className == "cell alive") {
+			counter++;
+		}
+		return counter;
+},
+	runClick: function() {
+		var cells = this.state.cells;
+		for (var cell = 71; cell < 3429; cell++) {
+			var counter = 0;
+			if (cells[cell].props.className == "cell") {
+				counter = this.getAliveNeighbours(cells, cell);
+				if (counter == 3) {
+					cells.splice(cell, 1, <div key={cell} className="cell alive"></div>);
+				}
+			} else {
+				counter = this.getAliveNeighbours(cells, cell);
+				if (counter == 2 || counter == 3) {
+					cells.splice(cell, 1, <div key={cell} className="cell"></div>);
+				}	
+			}
+		}
+
+		this.setState({cells: cells});
 	},
 	render: function() {
 		return (
 			<div>
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
-				<Controls />
+				<Controls runClick={this.runClick}/>
 				<Board cells={this.state.cells}/>
 			</div>
 		);
@@ -27,7 +74,7 @@ var Controls = React.createClass({
 	render: function() {
 		return (
 			<div className="controls">
-				<button className="control">Run</button>
+				<button className="control" onClick={this.props.runClick}>Run</button>
 				<button className="control">Pause</button>
 				<button className="control">Clear</button>
 				<div className="generations">Generation: 0</div>
