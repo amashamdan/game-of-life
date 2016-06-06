@@ -10,6 +10,14 @@ var GameArea = React.createClass({
 				initialCells.push(<div key={i} className="cell"></div>);
 			}
 		}
+		// BELOW IS FOR TESTING PATTERNS
+		/*for (var i = 0; i < 3500; i++) {
+			initialCells.push(<div className="cell"></div>);
+		}
+		initialCells[1780 - 69] = <div className="cell alive"></div>;
+		initialCells[1780] = <div className="cell alive"></div>;
+		initialCells[1780 + 70] = <div className="cell alive"></div>;
+		initialCells[1780 - 1] = <div className="cell alive"></div>;*/
 		return ({cells: initialCells});
 	},
 	getAliveNeighbours: function(cells, cell) {
@@ -42,20 +50,40 @@ var GameArea = React.createClass({
 	},
 	getGeneration: function() {
 		var cells = this.state.cells;
+		var nextState = [];
 		for (var cell = 71; cell < 3429; cell++) {
 			var counter = 0;
 			if (cells[cell].props.className == "cell") {
 				counter = this.getAliveNeighbours(cells, cell);
 				if (counter == 3) {
-					cells.splice(cell, 1, <div key={cell} className="cell alive"></div>);
+					nextState.push([cell, true]);
+				} else {
+					nextState.push([cell, false]);
 				}
 			} else {
 				counter = this.getAliveNeighbours(cells, cell);
 				if (counter == 2 || counter == 3) {
-					cells.splice(cell, 1, <div key={cell} className="cell"></div>);
+					nextState.push([cell, true]);	
+				} else {
+					nextState.push([cell, false]);
 				}	
 			}
 		}
+		/* The commented out loop below doesn't work to change the cells. the if all if statements get executed after the for loop is done, in other words all indices for splice will shifted by the final value of state. The below working code is similar, except it uses the actual cell number to be replaced except of referencing it using the for counter. */
+		for (cell in nextState) {
+			if (nextState[cell][1]) {
+				cells.splice(nextState[cell][0], 1, <div className="cell alive"></div>);
+			} else {
+				cells.splice(nextState[cell][0], 1, <div className="cell"></div>);
+			}
+		}
+		/*
+		for (var state in nextState) {
+			if (nextState[state]) {
+				console.log(state);
+				cells.splice(state + 71, 1, <div className="cell alive"></div>);
+			}
+		}*/
 		this.setState({cells: cells});
 	},
 	runClick: function() {
