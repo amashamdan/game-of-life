@@ -102,11 +102,22 @@ var GameArea = React.createClass({
 			timerStatus = false;
 		}
 	},
+	clearClick: function() {
+		var cells = [];
+		if (timerStatus) {
+			clearInterval(timer);
+			timerStatus = false;
+		}
+		for (var i = 0; i < 3500; i++) {
+				cells.push(<div key={i} className="cell"></div>);
+		}
+		this.setState({cells: cells, generations: 0});
+	},
 	render: function() {
 		return (
 			<div>
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
-				<Controls runClick={this.runClick} pauseClick={this.pauseClick} generations={this.state.generations}/>
+				<Controls runClick={this.runClick} generations={this.state.generations} clearClick={this.clearClick}/>
 				<Board cells={this.state.cells}/>
 			</div>
 		);
@@ -117,8 +128,8 @@ var Controls = React.createClass({
 	render: function() {
 		return (
 			<div className="controls">
-				<button className="control" onClick={this.props.runClick}>Run/Resume</button>
-				<button className="control">Clear</button>
+				<button className="control" onClick={this.props.runClick}>Run/Pause</button>
+				<button className="control" onClick={this.props.clearClick}>Clear</button>
 				<div className="generations">Generation: {this.props.generations}</div>
 			</div>
 		);
