@@ -5,47 +5,84 @@ var GameArea = React.createClass({
 		window.timerStatus = false;
 		for (var i = 0; i < 3500; i++) {
 			randomSelector = Math.random();
-			if (randomSelector > 0.8) {
+			if (randomSelector > 0.7) {
 				initialCells.push(<div key={i} onClick={this.cellClick.bind(null, i)} className="cell alive"></div>);
 			} else {
 				initialCells.push(<div key={i} onClick={this.cellClick.bind(null, i)} className="cell"></div>);
 			}
 		}
-		// BELOW IS FOR TESTING PATTERNS
-		/*for (var i = 0; i < 3500; i++) {
-			initialCells.push(<div className="cell"></div>);
-		}
-		initialCells[1780 - 69] = <div className="cell alive"></div>;
-		initialCells[1780] = <div className="cell alive"></div>;
-		initialCells[1780 + 70] = <div className="cell alive"></div>;
-		initialCells[1780 - 1] = <div className="cell alive"></div>;*/
 		this.runClick();
 		return ({cells: initialCells, generations: 0});
 	},
 	getAliveNeighbours: function(cells, cell) {
 		var counter = 0;
-		if (cells[cell - 1].props.className == "cell alive") {
+		var positions = {aboveLeft: -71, above: -70, aboveRight: -69, left: -1, right: 1, belowLeft: 69, below: 70, belowRight: 71};
+		/* top left corner */
+		if (cell == 0) {
+			positions.aboveLeft = 3499;
+			positions.above = 3430;
+			positions.aboveRight = 3431;
+			positions.left = 69;
+			positions.belowLeft = 139;
+		} else if (cell == 69) { /* top right corner */
+			positions.aboveLeft = 3429;
+			positions.above = 3430;
+			positions.aboveRight = 3361;
+			positions.right = -69;
+			positions.belowRight = 1;
+		} else if (cell == 3430) { /* bottom left */
+			positions.aboveLeft = -1;
+			positions.left = 69;
+			positions.belowLeft = -3361;
+			positions.below = -3430;
+			positions.belowRight = -3429;
+		} else if (cell == 3499) { /* bottom right */
+			positions.aboveRight = -139;
+			positions.right = -69;
+			positions.belowRight = -3499;
+			positions.below = -3430;
+			positions.belowLeft = -3431;
+		} else if (cell > 0 && cell < 69) { /* top row */
+			positions.above = 3430;
+			positions.aboveLeft = 3429;
+			positions.aboveRight = 3431;
+		} else if (cell > 3430 && cell < 3499) { /* bottom row */
+			positions.belowLeft = -3431;
+			positions.below = -3430;
+			positions.belowRight = -3429;
+		} else if (cell % 70 == 0) { /* left colomn */
+			positions.aboveLeft = -1;
+			positions.left = 69;
+			positions.belowLeft = 139;
+		} else if (cell % 70 == 69) { /* right colomn */
+			positions.aboveRight = -139;
+			positions.right = -69;
+			positions.belowRight = 1;
+		}
+		/* start counting alive neighbours */ 
+		cell = Number(cell);
+		if (cells[cell + positions.aboveLeft].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell + 1].props.className == "cell alive") {
+		if (cells[cell + positions.above].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell - 70].props.className == "cell alive") {
+		if (cells[cell + positions.aboveRight].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell + 70].props.className == "cell alive") {
+		if (cells[cell + positions.left].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell - 69].props.className == "cell alive") {
+		if (cells[cell + positions.right].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell - 71].props.className == "cell alive") {
+		if (cells[cell + positions.belowLeft].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell + 69].props.className == "cell alive") {
+		if (cells[cell + positions.below].props.className == "cell alive") {
 			counter++;
 		}
-		if (cells[cell + 71].props.className == "cell alive") {
+		if (cells[cell + positions.belowRight].props.className == "cell alive") {
 			counter++;
 		}
 		return counter;
@@ -53,7 +90,8 @@ var GameArea = React.createClass({
 	getGeneration: function() {
 		var cells = this.state.cells;
 		var nextState = [];
-		for (var cell = 71; cell < 3429; cell++) {
+		//for (var cell = 71; cell < 3429; cell++) {
+		for (var cell in cells) {
 			var counter = 0;
 			if (cells[cell].props.className == "cell") {
 				counter = this.getAliveNeighbours(cells, cell);
