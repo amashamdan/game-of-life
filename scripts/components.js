@@ -166,6 +166,7 @@ var GameArea = React.createClass({
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
 				<Controls runClick={this.runClick} generations={this.state.generations} clearClick={this.clearClick}/>
 				<Board cells={this.state.cells}/>
+				<Information />
 			</div>
 		);
 	}
@@ -189,6 +190,17 @@ var Board = React.createClass({
 			<div className="board">
 				{this.props.cells}
 			</div>
+		);
+	}
+})
+
+var Information = React.createClass({
+	render: function() {
+		return (
+			<ul className="information">
+				<li>John Conway's Game of Life, visit this <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="blank">link</a> to read about how the game works.</li>
+				<li>To view this page's guide, please visit this <a href="https://amashamdan.github.io/game-of-life" target="blank">link</a></li>
+			</ul>
 		);
 	}
 })
