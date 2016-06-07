@@ -3,7 +3,9 @@ var GameArea = React.createClass({
 		var initialCells = [];
 		var randomSelector;
 		window.timerStatus = false;
-		for (var i = 0; i < 3500; i++) {
+		var width = 70;
+		var height = 50;
+		for (var i = 0; i < width * height; i++) {
 			randomSelector = Math.random();
 			if (randomSelector > 0.7) {
 				initialCells.push(<div key={i} onClick={this.cellClick.bind(null, i)} className="cell alive"></div>);
@@ -12,51 +14,53 @@ var GameArea = React.createClass({
 			}
 		}
 		this.runClick();
-		return ({cells: initialCells, generations: 0});
+		return ({cells: initialCells, generations: 0, width: width, height: height});
 	},
 	getAliveNeighbours: function(cells, cell) {
 		var counter = 0;
-		var positions = {aboveLeft: -71, above: -70, aboveRight: -69, left: -1, right: 1, belowLeft: 69, below: 70, belowRight: 71};
+		var height = this.state.height;
+		var width = this.state.width;
+		var positions = {aboveLeft: -(width + 1), above: -width, aboveRight: -(width - 1), left: -1, right: 1, belowLeft: width - 1, below: width, belowRight: width + 1};
 		/* top left corner */
 		if (cell == 0) {
-			positions.aboveLeft = 3499;
-			positions.above = 3430;
-			positions.aboveRight = 3431;
-			positions.left = 69;
-			positions.belowLeft = 139;
-		} else if (cell == 69) { /* top right corner */
-			positions.aboveLeft = 3429;
-			positions.above = 3430;
-			positions.aboveRight = 3361;
-			positions.right = -69;
+			positions.aboveLeft = width * height - 1;
+			positions.above = width * height - width;
+			positions.aboveRight = positions.above + 1;
+			positions.left = width - 1;
+			positions.belowLeft = width * 2 - 1;
+		} else if (cell == width - 1) { /* top right corner */
+			positions.aboveLeft = width * height - (width + 1);
+			positions.above = positions.aboveLeft + 1;
+			positions.aboveRight = width * height - width * 2 + 1;
+			positions.right = -(width - 1);
 			positions.belowRight = 1;
-		} else if (cell == 3430) { /* bottom left */
+		} else if (cell == width * height - width) { /* bottom left */
 			positions.aboveLeft = -1;
-			positions.left = 69;
-			positions.belowLeft = -3361;
-			positions.below = -3430;
-			positions.belowRight = -3429;
-		} else if (cell == 3499) { /* bottom right */
-			positions.aboveRight = -139;
-			positions.right = -69;
-			positions.belowRight = -3499;
-			positions.below = -3430;
-			positions.belowLeft = -3431;
-		} else if (cell > 0 && cell < 69) { /* top row */
-			positions.above = 3430;
-			positions.aboveLeft = 3429;
-			positions.aboveRight = 3431;
-		} else if (cell > 3430 && cell < 3499) { /* bottom row */
-			positions.belowLeft = -3431;
-			positions.below = -3430;
-			positions.belowRight = -3429;
-		} else if (cell % 70 == 0) { /* left colomn */
+			positions.left = width - 1;
+			positions.belowLeft = -(width * height - width * 2 + 1);
+			positions.below = -(width * height - width);
+			positions.belowRight = -(width * height - width - 1);
+		} else if (cell == width * height - 1) { /* bottom right */
+			positions.aboveRight = -(width * 2 - 1);
+			positions.right = -(width - 1);
+			positions.belowRight = -(width * height - 1);
+			positions.below = -(width * height - width);
+			positions.belowLeft = -(width * height - width + 1);
+		} else if (cell > 0 && cell < width - 1) { /* top row */
+			positions.above = width * height - width;
+			positions.aboveLeft = width * height - width - 1;
+			positions.aboveRight = width * height - width + 1;
+		} else if (cell > width * height - width && cell < width * height - 1) { /* bottom row */
+			positions.belowLeft = -(width * height - width + 1);
+			positions.below = -(width * height - width);
+			positions.belowRight = -(width * height - width - 1);
+		} else if (cell % width == 0) { /* left colomn */
 			positions.aboveLeft = -1;
-			positions.left = 69;
-			positions.belowLeft = 139;
-		} else if (cell % 70 == 69) { /* right colomn */
-			positions.aboveRight = -139;
-			positions.right = -69;
+			positions.left = width - 1;
+			positions.belowLeft = width * 2 - 1;
+		} else if (cell % width == width - 1) { /* right colomn */
+			positions.aboveRight = -(width * 2 - 1);
+			positions.right = -(width - 1);
 			positions.belowRight = 1;
 		}
 		/* start counting alive neighbours */ 
