@@ -2,6 +2,7 @@ var GameArea = React.createClass({
 	getInitialState: function() {
 		var initialCells = [];
 		var randomSelector;
+		window.timerStatus = false;
 		for (var i = 0; i < 3500; i++) {
 			randomSelector = Math.random();
 			if (randomSelector > 0.8) {
@@ -18,6 +19,7 @@ var GameArea = React.createClass({
 		initialCells[1780] = <div className="cell alive"></div>;
 		initialCells[1780 + 70] = <div className="cell alive"></div>;
 		initialCells[1780 - 1] = <div className="cell alive"></div>;*/
+		this.runClick();
 		return ({cells: initialCells, generations: 0});
 	},
 	getAliveNeighbours: function(cells, cell) {
@@ -86,18 +88,25 @@ var GameArea = React.createClass({
 		}*/
 		this.setState({cells: cells, generations: this.state.generations + 1});
 	},
+	/* The way this function os written guarantess that no more than one timer will be running. */
 	runClick: function() {
-		/* NOTICE: this.try wasn't used directly inside setInterval because of scoping, this won't be referring to GameArea anymore. setting goforit to this.getGeneration passes the function definition only to goforit, inside the timer adding the brackets will run the function. If gorforit is set to this.getGeneration() it will run only once directly after run is clicked. */
-		var goforit = this.getGeneration;
-		setInterval(function() {
-			goforit();
-		}, 100)
+		if (!timerStatus) {
+			/* NOTICE: this.try wasn't used directly inside setInterval because of scoping, this won't be referring to GameArea anymore. setting goforit to this.getGeneration passes the function definition only to goforit, inside the timer adding the brackets will run the function. If gorforit is set to this.getGeneration() it will run only once directly after run is clicked. */
+			var getGeneration = this.getGeneration;
+			window.timer = setInterval(function() {
+				getGeneration();
+			}, 100);
+			timerStatus = true;
+		} else {
+			clearInterval(timer);
+			timerStatus = false;
+		}
 	},
 	render: function() {
 		return (
 			<div>
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
-				<Controls runClick={this.runClick} generations={this.state.generations}/>
+				<Controls runClick={this.runClick} pauseClick={this.pauseClick} generations={this.state.generations}/>
 				<Board cells={this.state.cells}/>
 			</div>
 		);
@@ -108,8 +117,7 @@ var Controls = React.createClass({
 	render: function() {
 		return (
 			<div className="controls">
-				<button className="control" onClick={this.props.runClick}>Run</button>
-				<button className="control">Pause</button>
+				<button className="control" onClick={this.props.runClick}>Run/Resume</button>
 				<button className="control">Clear</button>
 				<div className="generations">Generation: {this.props.generations}</div>
 			</div>
