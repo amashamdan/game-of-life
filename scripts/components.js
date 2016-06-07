@@ -74,9 +74,9 @@ var GameArea = React.createClass({
 		/* The commented out loop below doesn't work to change the cells. the if all if statements get executed after the for loop is done, in other words all indices for splice will shifted by the final value of state. The below working code is similar, except it uses the actual cell number to be replaced except of referencing it using the for counter. */
 		for (cell in nextState) {
 			if (nextState[cell][1]) {
-				cells.splice(nextState[cell][0], 1, <div className="cell alive"></div>);
+				cells.splice(nextState[cell][0], 1, <div key={nextState[cell][0]} className="cell alive"></div>);
 			} else {
-				cells.splice(nextState[cell][0], 1, <div className="cell"></div>);
+				cells.splice(nextState[cell][0], 1, <div key={nextState[cell][0]} className="cell"></div>);
 			}
 		}
 		/*
