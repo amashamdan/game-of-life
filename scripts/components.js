@@ -6,9 +6,9 @@ var GameArea = React.createClass({
 		for (var i = 0; i < 3500; i++) {
 			randomSelector = Math.random();
 			if (randomSelector > 0.8) {
-				initialCells.push(<div key={i} className="cell alive"></div>);
+				initialCells.push(<div key={i} onClick={this.cellClick.bind(null, i)} className="cell alive"></div>);
 			} else {
-				initialCells.push(<div key={i} className="cell"></div>);
+				initialCells.push(<div key={i} onClick={this.cellClick.bind(null, i)} className="cell"></div>);
 			}
 		}
 		// BELOW IS FOR TESTING PATTERNS
@@ -74,9 +74,9 @@ var GameArea = React.createClass({
 		/* The commented out loop below doesn't work to change the cells. the if all if statements get executed after the for loop is done, in other words all indices for splice will shifted by the final value of state. The below working code is similar, except it uses the actual cell number to be replaced except of referencing it using the for counter. */
 		for (cell in nextState) {
 			if (nextState[cell][1]) {
-				cells.splice(nextState[cell][0], 1, <div key={nextState[cell][0]} className="cell alive"></div>);
+				cells.splice(nextState[cell][0], 1, <div onClick={this.cellClick.bind(null, nextState[cell][0])} key={nextState[cell][0]} className="cell alive"></div>);
 			} else {
-				cells.splice(nextState[cell][0], 1, <div key={nextState[cell][0]} className="cell"></div>);
+				cells.splice(nextState[cell][0], 1, <div onClick={this.cellClick.bind(null, nextState[cell][0])} key={nextState[cell][0]} className="cell"></div>);
 			}
 		}
 		/*
@@ -109,9 +109,18 @@ var GameArea = React.createClass({
 			timerStatus = false;
 		}
 		for (var i = 0; i < 3500; i++) {
-				cells.push(<div key={i} className="cell"></div>);
+				cells.push(<div onClick={this.cellClick.bind(null, i)} key={i} className="cell"></div>);
 		}
 		this.setState({cells: cells, generations: 0});
+	},
+	cellClick: function(key) {
+		var cells = this.state.cells;
+		if (cells[key].props.className == "cell alive") {
+			cells.splice(key, 1, <div onClick={this.cellClick.bind(null, key)} key={key} className="cell"></div>);
+		} else {
+			cells.splice(key, 1, <div onClick={this.cellClick.bind(null, key)} key={key} className="cell alive"></div>);
+		}
+		this.setState({cells: cells});
 	},
 	render: function() {
 		return (
