@@ -5,6 +5,11 @@
 $cell-border-color: #454545;
 $cell-dead-color: black;
 $cell-alive-color: #EE4444;
+$main-header-color: white;
+
+body {
+	background-image: url("images/wall.jpg");
+}
 
 #container {
 	width: 100%;
@@ -16,6 +21,7 @@ $cell-alive-color: #EE4444;
 
 .main-header {
 	text-align: center;
+	color: $main-header-color;
 }
 
 .controls {
@@ -31,11 +37,16 @@ $cell-alive-color: #EE4444;
 	font-family: 'Ubuntu', sans-serif;
 }
 
+.generations {
+	color: $main-header-color;
+}
+
 .board {
 	display: flex;
 	flex-wrap: wrap;
 	width: 840px;
 	margin: 0 auto;
+	border: 2px solid gray;
 }
 
 .cell {
@@ -51,19 +62,20 @@ $cell-alive-color: #EE4444;
 .alive {
 	background-color: $cell-alive-color;
 }
-/*
-.cell-alive {
-	@include cell;
-	background-color: $cell-alive-color;
+
+.information {
+	color: $main-header-color;
+	font-size: 0.85em;
+	li {
+		margin: 5px 0 5px 0;
+	}
+	a {
+		color: $main-header-color;
+	}
 }
 
-.cell-dead {
-	@include cell;
-	background-color: $cell-dead-color;
-}*/
-
 .footer {
-	margin-top: 30px;
+	margin-top: 20px;
 	font-size: 0.7em;
 	color: gray;
 	a {
