@@ -18,7 +18,7 @@ var GameArea = React.createClass({
 		initialCells[1780] = <div className="cell alive"></div>;
 		initialCells[1780 + 70] = <div className="cell alive"></div>;
 		initialCells[1780 - 1] = <div className="cell alive"></div>;*/
-		return ({cells: initialCells});
+		return ({cells: initialCells, generations: 0});
 	},
 	getAliveNeighbours: function(cells, cell) {
 		var counter = 0;
@@ -84,20 +84,20 @@ var GameArea = React.createClass({
 				cells.splice(state + 71, 1, <div className="cell alive"></div>);
 			}
 		}*/
-		this.setState({cells: cells});
+		this.setState({cells: cells, generations: this.state.generations + 1});
 	},
 	runClick: function() {
 		/* NOTICE: this.try wasn't used directly inside setInterval because of scoping, this won't be referring to GameArea anymore. setting goforit to this.getGeneration passes the function definition only to goforit, inside the timer adding the brackets will run the function. If gorforit is set to this.getGeneration() it will run only once directly after run is clicked. */
 		var goforit = this.getGeneration;
 		setInterval(function() {
 			goforit();
-		}, 500)
+		}, 100)
 	},
 	render: function() {
 		return (
 			<div>
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
-				<Controls runClick={this.runClick}/>
+				<Controls runClick={this.runClick} generations={this.state.generations}/>
 				<Board cells={this.state.cells}/>
 			</div>
 		);
@@ -111,7 +111,7 @@ var Controls = React.createClass({
 				<button className="control" onClick={this.props.runClick}>Run</button>
 				<button className="control">Pause</button>
 				<button className="control">Clear</button>
-				<div className="generations">Generation: 0</div>
+				<div className="generations">Generation: {this.props.generations}</div>
 			</div>
 		);
 	}
