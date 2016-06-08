@@ -24,17 +24,26 @@ body {
 	color: $main-header-color;
 }
 
-.controls {
+@mixin controls {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	margin: 0 0 20px 0 ;
 }
 
+.controls {
+	@include controls;
+}
+
 .control {
 	margin: 0 10px 0 10px;
 	width: 100px;
 	font-family: 'Ubuntu', sans-serif;
+}
+
+.grid-controls {
+	@include controls;
+	padding-top: 20px;
 }
 
 .generations {
