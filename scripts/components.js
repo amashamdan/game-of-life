@@ -144,16 +144,21 @@ var GameArea = React.createClass({
 			timerStatus = false;
 		}
 	},
-	clearClick: function() {
+	clearClick: function(height, width) {
 		var cells = [];
 		if (timerStatus) {
 			clearInterval(timer);
 			timerStatus = false;
 		}
-		for (var i = 0; i < 3500; i++) {
+		if (width == 50) {
+			$(".board").css("width", "600px");
+		} else {
+			$(".board").css("width", "840px");
+		}
+		for (var i = 0; i < width * height; i++) {
 				cells.push(<div onClick={this.cellClick.bind(null, i)} key={i} className="cell"></div>);
 		}
-		this.setState({cells: cells, generations: 0});
+		this.setState({cells: cells, generations: 0, width: width, height: height});
 	},
 	cellClick: function(key) {
 		var cells = this.state.cells;
@@ -164,12 +169,25 @@ var GameArea = React.createClass({
 		}
 		this.setState({cells: cells});
 	},
+	/*smallClick: function() {
+		var cells = [];
+		if (timerStatus) {
+			clearInterval(timer);
+			timerStatus = false;
+		}
+		$(".board").css("width", "600px");
+		for (var i = 0; i < 50 * 30; i++) {
+				cells.push(<div onClick={this.cellClick.bind(null, i)} key={i} className="cell"></div>);
+		}
+		this.setState({cells: cells, generations: 0, width: 50, height: 30});
+	},*/
 	render: function() {
 		return (
 			<div>
 				<h3 className="main-header">Game of Life (built with ReactJS and Sass)</h3>
-				<Controls runClick={this.runClick} generations={this.state.generations} clearClick={this.clearClick}/>
+				<Controls runClick={this.runClick} generations={this.state.generations} clearClick={this.clearClick} width={this.state.width} height={this.state.height}/>
 				<Board cells={this.state.cells}/>
+				<GridControls click={this.clearClick} />
 				<Information />
 			</div>
 		);
@@ -178,10 +196,12 @@ var GameArea = React.createClass({
 
 var Controls = React.createClass({
 	render: function() {
+		var height = this.props.height;
+		var width = this.props.width;
 		return (
 			<div className="controls">
 				<button className="control" onClick={this.props.runClick}>Run/Pause</button>
-				<button className="control" onClick={this.props.clearClick}>Clear</button>
+				<button className="control" onClick={this.props.clearClick.bind(null, height, width)}>Clear</button>
 				<div className="generations">Generation: {this.props.generations}</div>
 			</div>
 		);
@@ -193,6 +213,17 @@ var Board = React.createClass({
 		return (
 			<div className="board">
 				{this.props.cells}
+			</div>
+		);
+	}
+})
+
+var GridControls = React.createClass({
+	render: function() {
+		return (
+			<div className="grid-controls">
+				<button className="control" onClick={this.props.click.bind(null, 30, 50)}>Small 30x50</button>
+				<button className="control" onClick={this.props.click.bind(null, 50, 70)}>Large 50x70</button>
 			</div>
 		);
 	}
